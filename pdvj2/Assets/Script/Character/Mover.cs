@@ -10,10 +10,13 @@ public class Mover : MonoBehaviour
 
     // Variables de uso interno en el script
     private float moverHorizontal;
+    private
+ float moverVertical;
     private Vector2 direccion;
 
     // Variable para referenciar otro componente del objeto
     private Rigidbody2D miRigidbody2D;
+
 
     // Codigo ejecutado cuando el objeto se activa en el nivel
     private void OnEnable()
@@ -21,14 +24,18 @@ public class Mover : MonoBehaviour
         miRigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    // Codigo ejecutado en cada frame del juego (Intervalo variable)
+    // Codigo ejecutado en cada frame del juego (Intervalo variable)   
+
     private void Update()
     {
         moverHorizontal = Input.GetAxis("Horizontal");
-        direccion = new Vector2(moverHorizontal, 0f);
+        moverVertical = Input.GetAxis("Vertical");
+        direccion = new Vector2(moverHorizontal, moverVertical);
     }
+
     private void FixedUpdate()
     {
-        miRigidbody2D.MovePosition(miRigidbody2D.position + direccion * (velocidad * Time.fixedDeltaTime));
+        miRigidbody2D.velocity
+ = direccion * velocidad;
     }
 }
