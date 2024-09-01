@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Cofre
   layers:
   - Default
   - TransparentFX
@@ -11,11 +12,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Plantas
+  - Enemigo
+  - Personaje
+  - Piso
+  - Cofre
   - 
   - 
   - 
@@ -38,6 +39,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Fondo
+    uniqueID: 2015827303
+    locked: 0
+  - name: Mapa
+    uniqueID: 1132439163
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Frente
+    uniqueID: 2103832589
     locked: 0
