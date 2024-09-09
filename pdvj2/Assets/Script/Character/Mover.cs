@@ -4,38 +4,24 @@ using UnityEngine;
 
 public class Mover : MonoBehaviour
 {
-    // Variables a configurar desde el editor
-    [Header("Configuracion")]
-    [SerializeField] float velocidad = 5f;
+    public float velocidadMovimiento = 5f;
 
-    // Variables de uso interno en el script
-    private float moverHorizontal;
-    private
- float moverVertical;
-    private Vector2 direccion;
+    private Rigidbody2D rb;
 
-    // Variable para referenciar otro componente del objeto
-    private Rigidbody2D miRigidbody2D;
-
-
-    // Codigo ejecutado cuando el objeto se activa en el nivel
-    private void OnEnable()
+    void Start()
     {
-        miRigidbody2D = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Codigo ejecutado en cada frame del juego (Intervalo variable)   
-
-    private void Update()
+    void FixedUpdate()
     {
-        moverHorizontal = Input.GetAxis("Horizontal");
-        moverVertical = Input.GetAxis("Vertical");
-        direccion = new Vector2(moverHorizontal, moverVertical);
-    }
+        float movimientoHorizontal = Input.GetAxis("Horizontal");
+        float movimientoVertical = Input.GetAxis("Vertical");
 
-    private void FixedUpdate()
-    {
-        miRigidbody2D.velocity
- = direccion * velocidad;
+
+        Vector2
+ direccion = new Vector2(movimientoHorizontal, movimientoVertical);
+
+        rb.velocity = direccion * velocidadMovimiento;
     }
 }

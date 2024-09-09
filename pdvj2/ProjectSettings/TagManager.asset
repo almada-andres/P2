@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cofre
+  - Enemigo
+  - Jugador
   layers:
   - Default
   - TransparentFX
