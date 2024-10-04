@@ -6,22 +6,18 @@ public class Vida : MonoBehaviour
 {
     public int vidaMaxima = 3;
     public int vidaActual;
-
-    public AudioClip sonidoDaño;
-    private AudioSource audioSource;
-    private Animator animator; 
+    public GameController gameController; // Referencia al GameController
+    public AudioClip sonidoDaño; // Sonido que se reproducirá al recibir daño
+    private AudioSource audioSource; // Referencia al componente AudioSource
+    private Animator animator; // Referencia al Animator
 
     void Start()
     {
         vidaActual = vidaMaxima;
-
-        // Obtener la referencia del Animator
+        audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
 
-        // Obtener la referencia del AudioSource
-        audioSource = GetComponent<AudioSource>();
-
-        // Si el objeto no tiene un AudioSource se añade automáticamente
+        // Verificar si hay un AudioSource y añadir uno si no existe
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -32,24 +28,30 @@ public class Vida : MonoBehaviour
     {
         vidaActual -= daño;
 
-        Debug.Log("Vida restante: " + vidaActual);
-
-        // Reproducir el sonido de daño
-        if (audioSource != null && sonidoDaño != null)
+        // Reproducir sonido de daño
+        if (sonidoDaño != null)
         {
             audioSource.PlayOneShot(sonidoDaño);
         }
 
-        // Activar la animación de "Daño" cuando el jugador reciba daño
-        if (animator != null)
+        // Activar la animación de "Daño" si el jugador no está muerto
+        if (vidaActual > 0)
         {
-            animator.SetTrigger("Daño");
+            if (animator != null)
+            {
+                animator.SetTrigger("Daño");
+            }
         }
-
-        // Comprobar si la vida llega a 0
-        if (vidaActual <= 0)
+        else if (vidaActual <= 0)
         {
+            // Si la vida llega a 0, activar el estado "Muerto"
+            if (animator != null)
+            {
+                animator.SetBool("Muerto", true); // Establecer el parámetro Muerto a true
+            }
+
             Debug.Log("Jugador derrotado");
+            gameController.Defeat(); // Llamar al método de derrota
         }
     }
 }

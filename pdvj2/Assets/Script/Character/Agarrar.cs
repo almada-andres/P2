@@ -7,16 +7,12 @@ public class Jugador : MonoBehaviour
     public AudioClip sonidoAbrirCofre; // Sonido al abrir el cofre
     public ParticleSystem particulasCofre; // Sistema de partículas para el cofre
     private AudioSource audioSource;
-
-    // Variable para controlar si el cofre ha sido recogido
-    private bool cofreRecogido = false;
+    public GameController gameController; // Referencia al GameController
+    private int cofresRecogidos = 0; // Contador de cofres recogidos
 
     void Start()
     {
-        // Obtener el componente AudioSource del jugador
         audioSource = GetComponent<AudioSource>();
-
-        // Si el jugador no tiene un AudioSource, se añade automáticamente
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -25,21 +21,26 @@ public class Jugador : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Cofre") && !cofreRecogido) // Verifica que el cofre no haya sido recogido
+        if (collision.CompareTag("Cofre"))
         {
-            cofreRecogido = true; // Marcar el cofre como recogido
-
             // Reproducir el sonido de abrir cofre
             audioSource.PlayOneShot(sonidoAbrirCofre);
 
             // Reproducir el sistema de partículas
             if (particulasCofre != null)
             {
-                // Colocar las partículas en la posición del cofre
                 particulasCofre.transform.position = collision.transform.position;
-
-                // Activar las partículas
                 particulasCofre.Play();
+            }
+
+            // Aumentar el contador de cofres recogidos
+            cofresRecogidos++;
+
+            // Comprobar si se han recogido todos los cofres
+            if (cofresRecogidos >= 1) // Se puede ir cambiando a medida que agrego cofres
+            {
+                Debug.Log("¡Victoria! Has recogido todos los cofres.");
+                gameController.Victory(); // Llamar al método de victoria en GameController
             }
 
             // Destruir el cofre después de la duración máxima entre el sonido y las partículas
