@@ -5,7 +5,11 @@ using UnityEngine;
 public class Jugador : MonoBehaviour
 {
     public AudioClip sonidoAbrirCofre; // Sonido al abrir el cofre
+    public ParticleSystem particulasCofre; // Sistema de partículas para el cofre
     private AudioSource audioSource;
+
+    // Variable para controlar si el cofre ha sido recogido
+    private bool cofreRecogido = false;
 
     void Start()
     {
@@ -21,13 +25,26 @@ public class Jugador : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Cofre"))
+        if (collision.CompareTag("Cofre") && !cofreRecogido) // Verifica que el cofre no haya sido recogido
         {
+            cofreRecogido = true; // Marcar el cofre como recogido
+
             // Reproducir el sonido de abrir cofre
             audioSource.PlayOneShot(sonidoAbrirCofre);
 
-            // Destruir el cofre después de un pequeño retraso para asegurarse de que el sonido se reproduzca
-            Destroy(collision.gameObject, sonidoAbrirCofre.length);
+            // Reproducir el sistema de partículas
+            if (particulasCofre != null)
+            {
+                // Colocar las partículas en la posición del cofre
+                particulasCofre.transform.position = collision.transform.position;
+
+                // Activar las partículas
+                particulasCofre.Play();
+            }
+
+            // Destruir el cofre después de la duración máxima entre el sonido y las partículas
+            float tiempoDestruccion = Mathf.Max(sonidoAbrirCofre.length, particulasCofre.main.duration);
+            Destroy(collision.gameObject, tiempoDestruccion);
         }
     }
 }
