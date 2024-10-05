@@ -5,15 +5,23 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     public float velocidadMovimiento = 5f;
-
     private Rigidbody2D rb;
+
+    public SpriteRenderer spriteRenderer;
+
+    // Almacenamos la 煤ltima direcci贸n horizontal
+    private float ultimaDireccionHorizontal;
+
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
         animator = GetComponent<Animator>();
+
 
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -24,15 +32,34 @@ public class Mover : MonoBehaviour
         float movimientoHorizontal = Input.GetAxis("Horizontal");
         float movimientoVertical = Input.GetAxis("Vertical");
 
+
+        // Creamos el vector de direcci贸n considerando ambos ejes
+        Vector2 direccion = new Vector2(movimientoHorizontal, movimientoVertical);
+
+        // Normalizamos el vector para mantener una velocidad constante en diagonal
+        direccion.Normalize();
+
+        rb.velocity = direccion * velocidadMovimiento;
+
+        // Actualizamos la 煤ltima direcci贸n horizontal solo si hay movimiento horizontal
+        if (movimientoHorizontal != 0)
+        {
+            ultimaDireccionHorizontal = movimientoHorizontal;
+        }
+
+        // Invertimos el sprite seg煤n la 煤ltima direcci贸n horizontal
+        spriteRenderer.flipX = ultimaDireccionHorizontal < 0;
+
         Vector2
  direccion = new Vector2(movimientoHorizontal, movimientoVertical);
 
         rb.velocity = direccion * velocidadMovimiento;
 
-        // Actualizar animaciones (ajusta los nombres de los par醡etros seg鷑 tus animaciones)
+        // Actualizar animaciones (ajusta los nombres de los par谩metros seg煤n tus animaciones)
         animator.SetFloat("Velocidad", Mathf.Abs(movimientoHorizontal));
 
         // Invertir sprite si se mueve hacia la izquierda
         spriteRenderer.flipX = movimientoHorizontal < 0;
+
     }
 }   
