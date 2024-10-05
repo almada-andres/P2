@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class Jugador : MonoBehaviour
 {
+
     public AudioClip sonidoAbrirCofre; // Sonido al abrir el cofre
-    public ParticleSystem particulasCofre; // Sistema de partÌculas para el cofre
+    public ParticleSystem particulasCofre; // Sistema de part√≠culas para el cofre
     private AudioSource audioSource;
     public GameController gameController; // Referencia al GameController
     private int cofresRecogidos = 0; // Contador de cofres recogidos
@@ -13,6 +14,17 @@ public class Jugador : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+    public AudioClip sonidoAbrirCofre;
+    private AudioSource audioSource;
+
+    void Start()
+    {
+        // Para cargar el audio
+        audioSource = GetComponent<AudioSource>();
+
+        // Si el jugador no tiene un AudioSource, se a√±ade autom√°ticamente
+
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -26,7 +38,8 @@ public class Jugador : MonoBehaviour
             // Reproducir el sonido de abrir cofre
             audioSource.PlayOneShot(sonidoAbrirCofre);
 
-            // Reproducir el sistema de partÌculas
+
+            // Reproducir el sistema de part√≠culas
             if (particulasCofre != null)
             {
                 particulasCofre.transform.position = collision.transform.position;
@@ -39,13 +52,17 @@ public class Jugador : MonoBehaviour
             // Comprobar si se han recogido todos los cofres
             if (cofresRecogidos >= 1) // Se puede ir cambiando a medida que agrego cofres
             {
-                Debug.Log("°Victoria! Has recogido todos los cofres.");
-                gameController.Victory(); // Llamar al mÈtodo de victoria en GameController
+                Debug.Log("¬°Victoria! Has recogido todos los cofres.");
+                gameController.Victory(); // Llamar al m√©todo de victoria en GameController
             }
 
-            // Destruir el cofre despuÈs de la duraciÛn m·xima entre el sonido y las partÌculas
+            // Destruir el cofre despu√©s de la duraci√≥n m√°xima entre el sonido y las part√≠culas
             float tiempoDestruccion = Mathf.Max(sonidoAbrirCofre.length, particulasCofre.main.duration);
             Destroy(collision.gameObject, tiempoDestruccion);
+
+            // Destruir el cofre despu√©s de un peque√±o retraso para asegurarse de que el sonido se reproduzca
+            Destroy(collision.gameObject, sonidoAbrirCofre.length);
+
         }
     }
 }

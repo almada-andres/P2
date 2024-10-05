@@ -7,39 +7,54 @@ public class Vida : MonoBehaviour
     public int vidaMaxima = 3;
     public int vidaActual;
     public GameController gameController; // Referencia al GameController
-    public AudioClip sonidoDaÒo; // Sonido que se reproducir· al recibir daÒo
+    public AudioClip sonidoDa√±o; // Sonido que se reproducir√° al recibir da√±o
     private AudioSource audioSource; // Referencia al componente AudioSource
     private Animator animator; // Referencia al Animator
 
+    // Sonido que se reproducir√° al recibir da√±o
+    public AudioClip sonidoDa√±o;
+
+    private AudioSource audioSource;
+
     void Start()
     {
+        // Inicializar la vida actual
         vidaActual = vidaMaxima;
+
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
 
-        // Verificar si hay un AudioSource y aÒadir uno si no existe
+        // Verificar si hay un AudioSource y a√±adir uno si no existe
+
+
+        // Cargar el componente AudioSource
+        audioSource = GetComponent<AudioSource>();
+
+        // Si el objeto no tiene un AudioSource, lo a√±adimos autom√°ticamente
+
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
     }
 
-    public void RestarVida(int daÒo)
+    public void RestarVida(int da√±o)
     {
-        vidaActual -= daÒo;
+        vidaActual -= da√±o;
 
-        // Reproducir sonido de daÒo
-        if (sonidoDaÒo != null)
+        // Reproducir sonido de da√±o
+        if (sonidoDa√±o != null)
         {
-            audioSource.PlayOneShot(sonidoDaÒo);
+            audioSource.PlayOneShot(sonidoDa√±o);
         }
 
-        // Activar la animaciÛn de "DaÒo" si el jugador no est· muerto
+
+        // Activar la animaci√≥n de "Da√±o" si el jugador no est√° muerto
         if (vidaActual > 0)
         {
             if (animator != null)
             {
-                animator.SetTrigger("DaÒo");
+                animator.SetTrigger("Da√±o");
             }
         }
         else if (vidaActual <= 0)
@@ -47,11 +62,14 @@ public class Vida : MonoBehaviour
             // Si la vida llega a 0, activar el estado "Muerto"
             if (animator != null)
             {
-                animator.SetBool("Muerto", true); // Establecer el par·metro Muerto a true
+                animator.SetBool("Muerto", true); // Establecer el par√°metro Muerto a true
             }
 
             Debug.Log("Jugador derrotado");
-            gameController.Defeat(); // Llamar al mÈtodo de derrota
+            gameController.Defeat(); // Llamar al m√©todo de derrota
         }
+
+        Debug.Log("Vida restante: " + vidaActual);
+
     }
 }
