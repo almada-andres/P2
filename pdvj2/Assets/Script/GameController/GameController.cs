@@ -5,17 +5,17 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public int totalCofres = 1; // Valor por defecto, puedes cambiarlo en el Inspector
+
     public void Victory()
     {
         Debug.Log("¡Victoria! Has recogido todos los cofres.");
-        // Cargar la escena de victoria o mostrar un panel de victoria
         SceneManager.LoadScene("VictoryScene");
     }
 
     public void Defeat()
     {
         Debug.Log("¡Derrota! Te has quedado sin vida.");
-        // Cargar la escena de derrota o mostrar un panel de Game Over
-        SceneManager.LoadScene("GameOverScene"); 
+        SceneManager.LoadScene("GameOverScene");
     }
 }

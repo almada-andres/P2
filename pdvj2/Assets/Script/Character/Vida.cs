@@ -5,33 +5,20 @@ using UnityEngine;
 public class Vida : MonoBehaviour
 {
     public int vidaMaxima = 3;
-    public int vidaActual;
-    public GameController gameController; // Referencia al GameController
-    public AudioClip sonidoDaño; // Sonido que se reproducirá al recibir daño
-    private AudioSource audioSource; // Referencia al componente AudioSource
-    private Animator animator; // Referencia al Animator
+    private int vidaActual;
 
-    // Sonido que se reproducirá al recibir daño
+    public GameController gameController;
     public AudioClip sonidoDaño;
-
     private AudioSource audioSource;
+    private Animator animator;
 
     void Start()
     {
-        // Inicializar la vida actual
         vidaActual = vidaMaxima;
-
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
 
-        // Verificar si hay un AudioSource y añadir uno si no existe
-
-
-        // Cargar el componente AudioSource
-        audioSource = GetComponent<AudioSource>();
-
-        // Si el objeto no tiene un AudioSource, lo añadimos automáticamente
-
+        // Asegurarse de que el AudioSource exista
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -42,34 +29,30 @@ public class Vida : MonoBehaviour
     {
         vidaActual -= daño;
 
-        // Reproducir sonido de daño
-        if (sonidoDaño != null)
+        if (vidaActual <= 0)
         {
-            audioSource.PlayOneShot(sonidoDaño);
+            vidaActual = 0; // Asegurarse de que la vida no sea negativa
+            if (animator != null)
+            {
+                animator.SetBool("Muerto", true);
+            }
+            Debug.Log("Jugador derrotado");
+            gameController.Defeat();
         }
-
-
-        // Activar la animación de "Daño" si el jugador no está muerto
-        if (vidaActual > 0)
+        else
         {
+            // Reproducir sonido de daño y activar animación
+            audioSource.PlayOneShot(sonidoDaño);
             if (animator != null)
             {
                 animator.SetTrigger("Daño");
             }
         }
-        else if (vidaActual <= 0)
-        {
-            // Si la vida llega a 0, activar el estado "Muerto"
-            if (animator != null)
-            {
-                animator.SetBool("Muerto", true); // Establecer el parámetro Muerto a true
-            }
-
-            Debug.Log("Jugador derrotado");
-            gameController.Defeat(); // Llamar al método de derrota
-        }
 
         Debug.Log("Vida restante: " + vidaActual);
-
     }
+
+    // Propiedades para encapsular vidaMaxima y vidaActual
+    public int VidaMaxima { get { return vidaMaxima; } set { vidaMaxima = value; } }
+    public int VidaActual { get { return vidaActual; } }
 }

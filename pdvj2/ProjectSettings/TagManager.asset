@@ -7,7 +7,6 @@ TagManager:
   - Cofre
   - Enemigo
   - Jugador
-  - Mapa
   layers:
   - Default
   - TransparentFX
@@ -21,7 +20,7 @@ TagManager:
   - Piso
   - Cofre
   - Bloqway
-  - Mapa
+  - 
   - 
   - 
   - 
