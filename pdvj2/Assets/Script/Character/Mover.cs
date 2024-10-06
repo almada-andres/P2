@@ -34,7 +34,8 @@ public class Mover : MonoBehaviour
 
         rb.velocity = direccion * velocidadMovimiento;
 
-        // Actualizar animaciones usando la magnitud del vector
+        // Actualizar los parámetros en el Animator
+        animator.SetBool("moviendo", direccion.magnitude > Mathf.Epsilon);
         animator.SetFloat("Velocidad", direccion.magnitude);
 
         // Invertir sprite según el movimiento horizontal actual
