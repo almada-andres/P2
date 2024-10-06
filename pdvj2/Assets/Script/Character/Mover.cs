@@ -9,11 +9,14 @@ public class Mover : MonoBehaviour
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
+    // Variables para almacenar la última dirección
+    private float lastHorizontalMovement;
+    private float lastVerticalMovement;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -23,22 +26,26 @@ public class Mover : MonoBehaviour
         float movimientoHorizontal = Input.GetAxis("Horizontal");
         float movimientoVertical = Input.GetAxis("Vertical");
 
-        // Crear el vector de dirección una sola vez
+        // Crear el vector de dirección
         Vector2 direccion = new Vector2(movimientoHorizontal, movimientoVertical);
 
-        // Normalizar solo si es necesario
+        // Normalizar si es necesario
         if (direccion.magnitude > Mathf.Epsilon)
         {
             direccion.Normalize();
         }
 
+        // Aplicar la velocidad al Rigidbody
         rb.velocity = direccion * velocidadMovimiento;
 
-        // Actualizar los parámetros en el Animator
-        animator.SetBool("moviendo", direccion.magnitude > Mathf.Epsilon);
+        // Actualizar el Animator
         animator.SetFloat("Velocidad", direccion.magnitude);
 
-        // Invertir sprite según el movimiento horizontal actual
-        spriteRenderer.flipX = movimientoHorizontal < 0;
+        // Actualizar la orientación del sprite
+        spriteRenderer.flipX = lastHorizontalMovement < 0;
+
+        // Almacenar la última dirección
+        lastHorizontalMovement = direccion.x;
+        lastVerticalMovement = direccion.y;
     }
 }
