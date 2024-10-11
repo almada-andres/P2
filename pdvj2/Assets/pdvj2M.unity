@@ -122,6 +122,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &2765910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2765911}
+  - component: {fileID: 2765912}
+  m_Layer: 0
+  m_Name: ControladorNoche
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2765911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2765910}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.201684, y: -1.335292, z: 10.000178}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1146050127}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2765912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2765910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520e565e5c4022c48a3be1cd03582e38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  luzGlobal: {fileID: 185374722}
+  colorInicial: {r: 0.2, g: 0.2, b: 0.4, a: 1}
+  colorFinal: {r: 0.05, g: 0.05, b: 0.1, a: 1}
+  duracionNoche: 30
 --- !u!1 &27658451
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,7 +376,7 @@ MonoBehaviour:
   m_LightType: 4
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.4729964, g: 0.4433961, b: 1, a: 1}
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
@@ -17484,8 +17532,10 @@ Transform:
   - {fileID: 1011612225}
   - {fileID: 1338980938}
   - {fileID: 185374721}
+  - {fileID: 2765911}
   - {fileID: 2137527277}
   - {fileID: 1970442402}
+  - {fileID: 1883119287}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1153535156
@@ -18646,6 +18696,53 @@ Transform:
   - {fileID: 572641995}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1883119286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1883119287}
+  - component: {fileID: 1883119288}
+  m_Layer: 0
+  m_Name: ControladorEventos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1883119287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883119286}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.201684, y: -1.335292, z: 10.000178}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1146050127}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1883119288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883119286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5188ea24cd11c945b910823f96e97de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tiempoEvento1: 10
+  tiempoEvento2: 20
+  ambientarNoche: {fileID: 2765912}
 --- !u!4 &1970442402 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1033542216290838875, guid: c9623c58c7b473b48912a8419a59c9fb, type: 3}
@@ -18913,7 +19010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabNiebla: {fileID: 4590399731922817143, guid: c9623c58c7b473b48912a8419a59c9fb, type: 3}
-  rangoPosicion: {x: 10, y: 10}
+  rangoPosicion: {x: 15, y: 12}
   tiempoMin: 2
   tiempoMax: 6
   maxNieblaEnEscena: 10
