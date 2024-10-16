@@ -10,12 +10,12 @@ public class GameController : MonoBehaviour
     public void Victory()
     {
         Debug.Log("¡Victoria! Has recogido todos los cofres.");
-        SceneManager.LoadScene("VictoryScene");
+        //SceneManager.LoadScene("VictoryScene");
     }
 
     public void Defeat()
     {
         Debug.Log("¡Derrota! Te has quedado sin vida.");
-        SceneManager.LoadScene("GameOverScene");
+        //SceneManager.LoadScene("GameOverScene");
     }
 }

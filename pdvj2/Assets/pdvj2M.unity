@@ -581,6 +581,51 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!1 &191820635
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 191820636}
+  - component: {fileID: 191820637}
+  m_Layer: 0
+  m_Name: SistemaProgreso
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &191820636
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191820635}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.2483654, y: 1.3979663, z: 10.012611}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1146050127}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &191820637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191820635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 120dba35aa041c64dbf428f9c1b27874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progresoNivel: {fileID: 11400000, guid: 10eeccd7fabb3144a94c3c165b753967, type: 2}
 --- !u!1 &239230674
 GameObject:
   m_ObjectHideFlags: 0
@@ -17846,6 +17891,7 @@ Transform:
   - {fileID: 2137527277}
   - {fileID: 1970442402}
   - {fileID: 1883119287}
+  - {fileID: 191820636}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1153535156
@@ -19735,9 +19781,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e949d0109f85a734d9192721d7089b21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidaMaxima: 3
   gameController: {fileID: 1011612226}
   "sonidoDa\xF1o": {fileID: 8300000, guid: 7b8e77a4ff782eb4cb0b627156ab148f, type: 3}
+  progresoNivel: {fileID: 11400000, guid: 10eeccd7fabb3144a94c3c165b753967, type: 2}
 --- !u!114 &2045008945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19766,6 +19812,7 @@ MonoBehaviour:
   sonidoAbrirCofre: {fileID: 8300000, guid: 49dbac4d37a6c814081c1c856f6193b7, type: 3}
   particulasCofre: {fileID: 842081716}
   gameController: {fileID: 1011612226}
+  sistemaProgreso: {fileID: 191820637}
 --- !u!95 &2045008947
 Animator:
   serializedVersion: 5

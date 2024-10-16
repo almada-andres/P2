@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Jugador : MonoBehaviour
 {
-    public AudioClip
- sonidoAbrirCofre;
+    public AudioClip sonidoAbrirCofre;
     public ParticleSystem particulasCofre;
     private AudioSource audioSource;
     public GameController gameController;
-    private int cofresRecogidos = 0;
+    public SistemaProgreso sistemaProgreso; // Referencia al sistema de progreso
     private Inventory inventory;
 
     void Start()
@@ -38,9 +37,10 @@ public class Jugador : MonoBehaviour
                     particulasCofre.Play();
                 }
 
-                cofresRecogidos++;
+                // Incrementar cofres abiertos en el sistema de progreso
+                sistemaProgreso.AbrirCofre();
 
-                if (cofresRecogidos >= gameController.totalCofres) // Comparar con el total de cofres en GameController
+                if (sistemaProgreso.progresoNivel.cofresAbiertos >= sistemaProgreso.progresoNivel.totalCofres)
                 {
                     Debug.Log("¡Victoria! Has recogido todos los cofres.");
                     gameController.Victory();
@@ -61,6 +61,10 @@ public class Jugador : MonoBehaviour
         if (collision.CompareTag("Llave"))
         {
             inventory.AddItem("llave");
+
+            // Incrementar llaves obtenidas en el sistema de progreso
+            sistemaProgreso.ObtenerLlave();
+
             Destroy(collision.gameObject);
         }
     }

@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class Vida : MonoBehaviour
 {
-    public int vidaMaxima = 3;
-    private int vidaActual;
-
     public GameController gameController;
     public AudioClip sonidoDaño;
     private AudioSource audioSource;
     private Animator animator;
+    public ProgresoNivelSO progresoNivel; // Referencia al Scriptable Object
 
     void Start()
     {
-        vidaActual = vidaMaxima;
+        progresoNivel.ResetearProgreso(); // Resetear el progreso al inicio si es necesario
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
 
@@ -27,11 +25,11 @@ public class Vida : MonoBehaviour
 
     public void RestarVida(int daño)
     {
-        vidaActual -= daño;
+        progresoNivel.vidaActual -= daño;
 
-        if (vidaActual <= 0)
+        if (progresoNivel.vidaActual <= 0)
         {
-            vidaActual = 0; // Asegurarse de que la vida no sea negativa
+            progresoNivel.vidaActual = 0; // Asegurarse de que la vida no sea negativa
             if (animator != null)
             {
                 animator.SetBool("Muerto", true);
@@ -49,10 +47,10 @@ public class Vida : MonoBehaviour
             }
         }
 
-        Debug.Log("Vida restante: " + vidaActual);
+        Debug.Log("Vida restante: " + progresoNivel.vidaActual);
     }
 
     // Propiedades para encapsular vidaMaxima y vidaActual
-    public int VidaMaxima { get { return vidaMaxima; } set { vidaMaxima = value; } }
-    public int VidaActual { get { return vidaActual; } }
+    public int VidaMaxima { get { return progresoNivel.vidaMaxima; } set { progresoNivel.vidaMaxima = value; } }
+    public int VidaActual { get { return progresoNivel.vidaActual; } }
 }
