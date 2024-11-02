@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/pdvj2M.unity
+    path: Assets/Scenes/Menu Principal.unity
+    guid: c9429389270b208479a9b6313e991e02
+  - enabled: 1
+    path: Assets/Scenes/Stage 1.unity
     guid: 7956052d185ae2f4c8dda5826024b7de
   m_configObjects: {}

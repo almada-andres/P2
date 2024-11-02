@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public int totalCofres = 1; // Valor por defecto, puedes cambiarlo en el Inspector
+    public int totalCofres = 1;
 
     public void Victory()
     {
