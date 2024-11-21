@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EfectoSangre : MonoBehaviour
 {
-    public ParticleSystem particulasSangre;
+    [SerializeField] private ParticleSystem particulasSangre;
 
     public void EmitirSangre()
     {

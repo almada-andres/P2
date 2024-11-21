@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    public GameObject prefab; // Prefab que el pool va a administrar
-    public int initialSize = 10; // Tamaño del pool
+    [SerializeField] private GameObject prefab; // Prefab que el pool va a administrar
+    [SerializeField] private int initialSize = 10; // Tamaño del pool
 
     private Queue<GameObject> pool = new Queue<GameObject>();
 

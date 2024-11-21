@@ -1,14 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering.Universal;
 
 public class CandleController : MonoBehaviour
 {
-    public GameObject candleLightObject; // Objeto que contiene la luz 2D de la vela
-    public GameObject player; // Referencia al jugador
-    public UnityEvent OnCandleCollected; // Evento para abrir la puerta
+    [SerializeField] private GameObject candleLightObject; // Objeto que contiene la luz 2D de la vela
+    [SerializeField] private GameObject player;
+    [SerializeField] private UnityEvent OnCandleCollected; // Evento para abrir la puerta
 
     private void OnEnable()
     {

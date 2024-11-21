@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InvocarNieblaAleatoria : MonoBehaviour
 {
-    public ObjectPool poolNiebla;     // Referencia al Object Pool de niebla
-    public Vector2 rangoPosicion;    // Rango de posiciones para instanciar la niebla
-    public float tiempoMin = 2f;     // Tiempo mínimo entre la aparición de niebla
-    public float tiempoMax = 6f;     // Tiempo máximo entre la aparición de niebla
-    public int maxNieblaEnEscena = 10; // Máxima cantidad de niebla en la escena
-    public int minimoNieblaActiva = 5; // Mínimo número de nieblas activas
+    [SerializeField] private ObjectPool poolNiebla;
+    [SerializeField] private Vector2 rangoPosicion; 
+    [SerializeField] private float tiempoMin = 2f; 
+    [SerializeField] private float tiempoMax = 6f; 
+    [SerializeField] private int maxNieblaEnEscena = 10;
+    [SerializeField] private int minimoNieblaActiva = 5;
 
     private float tiempoProximaNiebla;
     private int nieblasActivas = 0; // Contador de nieblas activas
@@ -54,7 +52,7 @@ public class InvocarNieblaAleatoria : MonoBehaviour
         nieblasActivas++;
 
         // Devuelve la niebla al pool despues de un tiempo
-        StartCoroutine(DevolverNiebla(niebla, 5f)); // Ejemplo: la niebla dura 5 segundos
+        StartCoroutine(DevolverNiebla(niebla, 5f)); // la niebla dura 5 segundos
     }
 
     System.Collections.IEnumerator DevolverNiebla(GameObject niebla, float delay)
@@ -64,4 +62,3 @@ public class InvocarNieblaAleatoria : MonoBehaviour
         nieblasActivas--;
     }
 }
-

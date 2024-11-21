@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement; // Para cargar y reiniciar escenas
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public int totalCofres = 1;
 
     public void Victory()
     {
-        Debug.Log("¡Victoria! Has recogido todos los cofres.");
+        Debug.Log("Has recogido todos los cofres.");
         //SceneManager.LoadScene("VictoryScene");
     }
 

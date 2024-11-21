@@ -1,12 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class Inventory : MonoBehaviour
 {
-    public List<string> items = new List<string>();
+    [SerializeField] private List<string> items = new List<string>();
 
-    public
- bool HasItem(string item)
+    public bool HasItem(string item)
     {
         return items.Contains(item);
     }
@@ -19,6 +18,5 @@ public class Inventory : MonoBehaviour
     public void RemoveItem(string item)
     {
         items.Remove(item);
-
     }
 }

@@ -1,22 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Jugador : MonoBehaviour
 {
-    public AudioClip sonidoAbrirCofre;      // Sonido de abrir el cofre
-    public AudioClip sonidoRecogerLlave;   // Sonido de recoger la llave
-    public ParticleSystem particulasCofre;  // Partículas al abrir el cofre
-    private AudioSource audioSource;        // Componente de AudioSource
-    public GameController gameController;   // Controlador del juego
-    public SistemaProgreso sistemaProgreso; // Sistema de progreso del juego
-    private Inventory inventory;            // Inventario del jugador
+    [SerializeField] private AudioClip sonidoAbrirCofre;
+    [SerializeField] private AudioClip sonidoRecogerLlave;
+    [SerializeField] private ParticleSystem particulasCofre;
+    private AudioSource audioSource;
+
+    [SerializeField] private GameController gameController; 
+    [SerializeField] private SistemaProgreso sistemaProgreso;
+    private Inventory inventory; 
 
     private bool visible = true;            // Estado de visibilidad del jugador
 
-    public Image imageLlave;               // Referencia al Image de la llave en el HUD
-    private bool tieneLlave = false;       // Estado de si el jugador tiene la llave
+    [SerializeField] private Image imageLlave;               // Referencia al Image de la llave en el HUD
+    [SerializeField] private bool tieneLlave = false;       // Estado de si el jugador tiene la llave
+
 
     public void SetVisibilidad(bool estado)
     {
@@ -55,10 +55,8 @@ public class Jugador : MonoBehaviour
         {
             if (tieneLlave) // Verifica si el jugador tiene la llave
             {
-                // Reproducir el sonido de abrir el cofre
                 audioSource.PlayOneShot(sonidoAbrirCofre);
 
-                // Activar las partículas del cofre si están asignadas
                 if (particulasCofre != null)
                 {
                     particulasCofre.transform.position = collision.transform.position;
@@ -68,13 +66,14 @@ public class Jugador : MonoBehaviour
                 // Actualizar el progreso del nivel
                 sistemaProgreso.AbrirCofre();
 
-                if (sistemaProgreso.progresoNivel.cofresAbiertos >= sistemaProgreso.progresoNivel.totalCofres)
+                // getter para acceder a totalCofres y cofresAbiertos
+                if (sistemaProgreso.progresoNivel.GetCofresAbiertos() >= sistemaProgreso.progresoNivel.GetTotalCofres())
                 {
-                    Debug.Log("¡Victoria! Has recogido todos los cofres.");
+                    Debug.Log("Has recogido todos los cofres.");
                     gameController.Victory();
                 }
 
-                // Destruir el cofre después de reproducir sonido y partículas
+                // Destruir el cofre
                 float tiempoDestruccion = Mathf.Max(sonidoAbrirCofre.length, particulasCofre.main.duration);
                 Destroy(collision.gameObject, tiempoDestruccion);
 
@@ -92,7 +91,6 @@ public class Jugador : MonoBehaviour
         {
             Debug.Log("El jugador ha colisionado con una llave.");
 
-            // Reproducir el sonido de recoger la llave
             if (sonidoRecogerLlave != null)
             {
                 audioSource.PlayOneShot(sonidoRecogerLlave);
@@ -120,7 +118,7 @@ public class Jugador : MonoBehaviour
         // Actualizar la visibilidad del icono de la llave en el HUD
         if (imageLlave != null)
         {
-            imageLlave.enabled = tieneLlave; // Se activa si el jugador tiene la llave, de lo contrario se desactiva
+            imageLlave.enabled = tieneLlave;
         }
     }
 }

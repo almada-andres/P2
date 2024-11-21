@@ -3,21 +3,22 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    public AudioSource buttonClickSound; // AudioSource para el sonido de clic
+    [SerializeField] private AudioSource buttonClickSound;
+
     public void StartGame()
     {
-        buttonClickSound.Play(); // Sonido al presionar el boton
+        buttonClickSound.Play();
         SceneManager.LoadScene("Stage 1");
     }
 
     public void OpenOptions()
     {
-        buttonClickSound.Play(); // sonido al presionar el boton
+        buttonClickSound.Play();
     }
 
     public void QuitGame()
     {
-        buttonClickSound.Play(); // Sonido al presionar el boton
+        buttonClickSound.Play(); 
         Application.Quit();
         Debug.Log("Juego cerrado"); // Solo para pruebas en el editor
     }

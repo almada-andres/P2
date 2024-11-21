@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjetoVida : MonoBehaviour
 {
-    public int cantidadVida = 1; // Cantidad de vida que otorga este objeto
+    [SerializeField] private int cantidadVida = 1; // Cantidad de vida que otorga este objeto
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -14,7 +12,7 @@ public class ObjetoVida : MonoBehaviour
 
             if (vidaJugador != null)
             {
-                // Solo añade vida si el jugador no está en el máximo
+                // Solo añade vida si el jugador no está en el maximo
                 if (vidaJugador.VidaActual < vidaJugador.VidaMaxima)
                 {
                     vidaJugador.AgregarVida(cantidadVida);

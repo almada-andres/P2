@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
 
 public class Cartel : MonoBehaviour
 {
-    public GameObject panelMensaje;
+    [SerializeField] private GameObject panelMensaje;
+
     private void Start()
     {
-        panelMensaje.SetActive(false);    // Desactiva el panel del mensaje al inicio
+        panelMensaje.SetActive(false);   // Desactiva el panel del mensaje al inicio
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -29,4 +28,3 @@ public class Cartel : MonoBehaviour
         }
     }
 }
-

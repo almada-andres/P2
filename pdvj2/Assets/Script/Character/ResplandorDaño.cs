@@ -1,14 +1,13 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal; 
+using UnityEngine.Rendering.Universal;
 
 public class Resplandor : MonoBehaviour
 {
-    public Light2D luzResplandor;
-    public float intensidadInicial = 1.5f;
-    public float duracionResplandor = 0.5f;
-    private bool enResplandor = false; 
+    [SerializeField] private Light2D luzResplandor; 
+    [SerializeField] private float intensidadInicial = 1.5f;
+    [SerializeField] private float duracionResplandor = 0.5f;
+    private bool enResplandor = false;
 
     void Start()
     {

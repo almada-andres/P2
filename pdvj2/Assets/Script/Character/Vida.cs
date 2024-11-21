@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,39 +5,36 @@ using UnityEngine.Events;
 
 public class Vida : MonoBehaviour
 {
-    public GameController gameController;
-    public AudioClip sonidoDaño;
+    [SerializeField] private GameController gameController;
+    [SerializeField] private AudioClip sonidoDaño;
     private AudioSource audioSource;
     private Animator animator;
-    public ProgresoNivelSO progresoNivel;
+    [SerializeField] private ProgresoNivelSO progresoNivel;
 
-    public List<Image> iconosVida;
-    public UnityEvent onVidaModificada;
+    [SerializeField] private List<Image> iconosVida;
+    [SerializeField] private UnityEvent onVidaModificada; 
 
     void Start()
     {
-        progresoNivel.ResetearProgreso(); // Resetear el progreso al inicio si es necesario
+        progresoNivel.ResetearProgreso();
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
-
 
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
 
-        
-
-        ActualizarIconosVida(); 
+        ActualizarIconosVida();
     }
 
     public void RestarVida(int daño)
     {
-        progresoNivel.vidaActual -= daño;
+        progresoNivel.VidaActual -= daño;
 
-        if (progresoNivel.vidaActual <= 0)
+        if (progresoNivel.VidaActual <= 0)
         {
-            progresoNivel.vidaActual = 0; // Asegura que la vida no sea negativa
+            progresoNivel.VidaActual = 0; // Asegura que la vida no sea negativa
 
             if (animator != null)
             {
@@ -64,7 +60,7 @@ public class Vida : MonoBehaviour
             Jugador jugador = GetComponent<Jugador>();
             if (jugador != null)
             {
-                jugador.SetVisibilidad(false); 
+                jugador.SetVisibilidad(false);
             }
 
             Debug.Log("Jugador derrotado");
@@ -74,25 +70,24 @@ public class Vida : MonoBehaviour
         {
             // Reproducir sonido de daño y activar animación
             audioSource.PlayOneShot(sonidoDaño);
-      
+
             if (animator != null)
             {
                 animator.SetTrigger("Daño");
             }
 
-            // Activar el resplandor de daño - Se realizo de esta manera por error al declarar al principio la referencia y no poder solucionarlo.
+            // Activar el resplandor de daño
             Resplandor resplandor = GetComponent<Resplandor>();
             EfectoSangre efectoSangre = GetComponent<EfectoSangre>();
 
             if (resplandor != null && efectoSangre != null)
             {
                 efectoSangre.EmitirSangre();
-
                 resplandor.Luz();
             }
         }
 
-        Debug.Log("Vida restante: " + progresoNivel.vidaActual);
+        Debug.Log("Vida restante: " + progresoNivel.VidaActual);
 
         onVidaModificada.Invoke();
 
@@ -126,37 +121,36 @@ public class Vida : MonoBehaviour
 
     private void ActualizarIconosVida()
     {
-        // Itera sobre los íconos de vida y actualiza su visibilidad
         for (int i = 0; i < iconosVida.Count; i++)
         {
-            if (i < progresoNivel.vidaActual)
+            if (i < progresoNivel.VidaActual)
             {
-                iconosVida[i].enabled = true; // Muestra el ícono si hay vida
+                iconosVida[i].enabled = true; // Muestra el icono si hay vida
             }
             else
             {
-                iconosVida[i].enabled = false; // Oculta el ícono si la vida fue restada
+                iconosVida[i].enabled = false; // Oculta el icono si la vida fue restada
             }
         }
     }
 
     public void AgregarVida(int cantidad)
     {
-        if (progresoNivel.vidaActual >= progresoNivel.vidaMaxima)
+        if (progresoNivel.VidaActual >= progresoNivel.VidaMaxima)
         {
             Debug.Log("El jugador ya tiene la vida máxima.");
-            return; // Si la vida está en el máximo, no hace nada
+            return; // Si la vida está en el maximo, no hace nada
         }
 
-        // Calcula la cantidad de vida que se puede agregar sin superar el máximo
-        int vidaRestanteParaMaximo = progresoNivel.vidaMaxima - progresoNivel.vidaActual;
+        // Calcula la cantidad de vida que se puede agregar sin superar el maximo
+        int vidaRestanteParaMaximo = progresoNivel.VidaMaxima - progresoNivel.VidaActual;
         int vidaAAgregar = Mathf.Min(cantidad, vidaRestanteParaMaximo);
 
-        progresoNivel.vidaActual += vidaAAgregar;
+        progresoNivel.VidaActual += vidaAAgregar;
 
         // Actualiza los íconos de vida en pantalla
         ActualizarIconosVida();
-        Debug.Log("Vida añadida: " + vidaAAgregar + " | Vida actual: " + progresoNivel.vidaActual);
+        Debug.Log("Vida añadida: " + vidaAAgregar + " | Vida actual: " + progresoNivel.VidaActual);
     }
 
     // Propiedades para encapsular vidaMaxima y vidaActual
@@ -164,18 +158,19 @@ public class Vida : MonoBehaviour
     {
         get
         {
-            return progresoNivel.vidaMaxima;
+            return progresoNivel.VidaMaxima;
         }
         set
         {
-            progresoNivel.vidaMaxima = value;
+            progresoNivel.VidaMaxima = value;
         }
     }
+
     public int VidaActual
     {
         get
         {
-            return progresoNivel.vidaActual;
+            return progresoNivel.VidaActual;
         }
     }
 }

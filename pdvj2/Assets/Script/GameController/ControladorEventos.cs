@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ControladorEventos : MonoBehaviour
 {
-    public float tiempoEvento1 = 10f; // Tiempo en segundos para el primer evento
-    public float tiempoEvento2 = 20f; // Tiempo en segundos para el segundo evento
-    public AmbientarNocheOscura ambientarNoche; // Referencia al script que controla la noche
+    [SerializeField] private float tiempoEvento1 = 10f; // Tiempo en segundos para el primer evento
+    [SerializeField] private float tiempoEvento2 = 20f; // Tiempo en segundos para el segundo evento
+    [SerializeField] private AmbientarNocheOscura ambientarNoche; // Referencia al script que controla la noche
 
     private float temporizador = 0f;   // Temporizador para contar el tiempo transcurrido
 
@@ -33,13 +31,11 @@ public class ControladorEventos : MonoBehaviour
     void EjecutarEvento1()
     {
         Debug.Log("Ejecutando Evento 1");
-        // Aquí puedes iniciar la noche oscura
         ambientarNoche.IniciarNoche();
     }
 
     void EjecutarEvento2()
     {
         Debug.Log("Ejecutando Evento 2");
-        // Puedes programar otro evento aquí
     }
 }

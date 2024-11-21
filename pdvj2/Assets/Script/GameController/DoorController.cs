@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorController : MonoBehaviour
 {
-    public GameObject puertaAbiertaIzquierda;
-    public GameObject puertaAbiertaDerecha;
-    public ParticleSystem agujeroNegroParticulas;
+    [SerializeField] private GameObject puertaAbiertaIzquierda;
+    [SerializeField] private GameObject puertaAbiertaDerecha;
+    [SerializeField] private ParticleSystem agujeroNegroParticulas;
+
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
 
