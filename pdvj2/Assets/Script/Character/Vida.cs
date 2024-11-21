@@ -10,9 +10,9 @@ public class Vida : MonoBehaviour
     public AudioClip sonidoDaño;
     private AudioSource audioSource;
     private Animator animator;
-    public ProgresoNivelSO progresoNivel; // Referencia al Scriptable Object
+    public ProgresoNivelSO progresoNivel;
 
-    public List<Image> iconosVida; // Lista de íconos de vida en el Canvas
+    public List<Image> iconosVida;
     public UnityEvent onVidaModificada; // Evento para acciones adicionales al restar vida
 
     void Start()
@@ -37,10 +37,37 @@ public class Vida : MonoBehaviour
         if (progresoNivel.vidaActual <= 0)
         {
             progresoNivel.vidaActual = 0; // Asegura que la vida no sea negativa
+
             if (animator != null)
             {
-                animator.SetBool("Muerto", true);
+                // Resetea cualquier trigger o parametro que este activo
+                foreach (AnimatorControllerParameter parametro in animator.parameters)
+                {
+                    if (parametro.type == AnimatorControllerParameterType.Bool)
+                    {
+                        animator.SetBool(parametro.name, false);
+                    }
+                    else if (parametro.type == AnimatorControllerParameterType.Trigger)
+                    {
+                        animator.ResetTrigger(parametro.name);
+                    }
+                }
+
+                animator.Play("Muerto"); 
+                Debug.Log("Forzando animación 'Muerto'.");
+                /*Tuve que forzar la animación, ya que no podia solucionar/encontrar el error que impedia que se ejecute.*/
             }
+
+            // Desactiva el movimiento y la interacción del jugador
+            DesactivarMovimiento();
+
+            Jugador jugador = GetComponent<Jugador>();
+            if (jugador != null)
+            {
+                jugador.SetVisibilidad(false); // Desactiva la visibilidad
+            }
+
+            // Llama a la función de derrota del controlador del juego
             Debug.Log("Jugador derrotado");
             gameController.Defeat();
         }
@@ -56,11 +83,34 @@ public class Vida : MonoBehaviour
 
         Debug.Log("Vida restante: " + progresoNivel.vidaActual);
 
-        // Llama al evento de actualización de vida
         onVidaModificada.Invoke();
-
-        // Actualiza los íconos de vida visualmente
+  
         ActualizarIconosVida();
+    }
+
+    private void DesactivarMovimiento()
+    {
+        // Desactiva el script de movimiento
+        Mover movimiento = GetComponent<Mover>();
+        if (movimiento != null)
+        {
+            movimiento.enabled = false;
+        }
+
+        // Detener el Rigidbody2D
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero; // Detener al personaje
+            rb.isKinematic = true;
+        }
+
+        // Desactivar otros componentes
+        Collider2D collider = GetComponent<Collider2D>();
+        if (collider != null)
+        {
+            collider.enabled = false; // Desactiva el colisionador
+        }
     }
 
     private void ActualizarIconosVida()
@@ -99,6 +149,22 @@ public class Vida : MonoBehaviour
     }
 
     // Propiedades para encapsular vidaMaxima y vidaActual
-    public int VidaMaxima { get { return progresoNivel.vidaMaxima; } set { progresoNivel.vidaMaxima = value; } }
-    public int VidaActual { get { return progresoNivel.vidaActual; } }
+    public int VidaMaxima
+    {
+        get
+        {
+            return progresoNivel.vidaMaxima;
+        }
+        set
+        {
+            progresoNivel.vidaMaxima = value;
+        }
+    }
+    public int VidaActual
+    {
+        get
+        {
+            return progresoNivel.vidaActual;
+        }
+    }
 }

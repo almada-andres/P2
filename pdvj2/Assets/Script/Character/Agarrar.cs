@@ -1,15 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Jugador : MonoBehaviour
 {
-    public AudioClip sonidoAbrirCofre;
-    public ParticleSystem particulasCofre;
-    private AudioSource audioSource;
-    public GameController gameController;
-    public SistemaProgreso sistemaProgreso; // Referencia al sistema de progreso
-    private Inventory inventory;
+    public AudioClip sonidoAbrirCofre;      // Sonido de abrir el cofre
+    public AudioClip sonidoRecogerLlave;   // Sonido de recoger la llave
+    public ParticleSystem particulasCofre;  // Partículas al abrir el cofre
+    private AudioSource audioSource;        // Componente de AudioSource
+    public GameController gameController;   // Controlador del juego
+    public SistemaProgreso sistemaProgreso; // Sistema de progreso del juego
+    private Inventory inventory;            // Inventario del jugador
+
+    private bool visible = true;            // Estado de visibilidad del jugador
+
+    public Image imageLlave;               // Referencia al Image de la llave en el HUD
+    private bool tieneLlave = false;       // Estado de si el jugador tiene la llave
+
+    public void SetVisibilidad(bool estado)
+    {
+        visible = estado;
+    }
+
+    public bool EsVisible()
+    {
+        return visible;
+    }
 
     void Start()
     {
@@ -20,24 +37,35 @@ public class Jugador : MonoBehaviour
         }
 
         inventory = FindObjectOfType<Inventory>();
+
+        // Asegurarse de que la imagen de la llave esté desactivada al inicio
+        if (imageLlave != null)
+        {
+            imageLlave.enabled = false; // Desactivar la imagen al inicio
+        }
+        else
+        {
+            Debug.LogWarning("No se ha asignado la imagen de la llave en el HUD.");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Cofre"))
         {
-            if (inventory.HasItem("llave"))
+            if (tieneLlave) // Verifica si el jugador tiene la llave
             {
-                // Abrir el cofre
+                // Reproducir el sonido de abrir el cofre
                 audioSource.PlayOneShot(sonidoAbrirCofre);
 
+                // Activar las partículas del cofre si están asignadas
                 if (particulasCofre != null)
                 {
                     particulasCofre.transform.position = collision.transform.position;
                     particulasCofre.Play();
                 }
 
-                // Incrementar cofres abiertos en el sistema de progreso
+                // Actualizar el progreso del nivel
                 sistemaProgreso.AbrirCofre();
 
                 if (sistemaProgreso.progresoNivel.cofresAbiertos >= sistemaProgreso.progresoNivel.totalCofres)
@@ -46,11 +74,13 @@ public class Jugador : MonoBehaviour
                     gameController.Victory();
                 }
 
-                // Destruir el cofre después del tiempo más largo entre sonido y partículas
+                // Destruir el cofre después de reproducir sonido y partículas
                 float tiempoDestruccion = Mathf.Max(sonidoAbrirCofre.length, particulasCofre.main.duration);
                 Destroy(collision.gameObject, tiempoDestruccion);
 
-                inventory.RemoveItem("llave"); // Opcional: Eliminar la llave del inventario si solo se usa una vez
+                // Eliminar la llave si solo se usa una vez
+                tieneLlave = false;
+                ActualizarIconoLlave();
             }
             else
             {
@@ -60,12 +90,37 @@ public class Jugador : MonoBehaviour
 
         if (collision.CompareTag("Llave"))
         {
-            inventory.AddItem("llave");
+            Debug.Log("El jugador ha colisionado con una llave.");
 
-            // Incrementar llaves obtenidas en el sistema de progreso
+            // Reproducir el sonido de recoger la llave
+            if (sonidoRecogerLlave != null)
+            {
+                audioSource.PlayOneShot(sonidoRecogerLlave);
+            }
+
+            // Añadir la llave al inventario
+            inventory.AddItem("llave");
+            Debug.Log("Llave añadida al inventario.");
+
+            // Actualizar el progreso del nivel
             sistemaProgreso.ObtenerLlave();
 
+            // Activar el icono de la llave en el HUD
+            tieneLlave = true;
+            ActualizarIconoLlave();
+
+            // Destruir el objeto de la llave
             Destroy(collision.gameObject);
+            Debug.Log("Objeto de la llave destruido.");
+        }
+    }
+
+    private void ActualizarIconoLlave()
+    {
+        // Actualizar la visibilidad del icono de la llave en el HUD
+        if (imageLlave != null)
+        {
+            imageLlave.enabled = tieneLlave; // Se activa si el jugador tiene la llave, de lo contrario se desactiva
         }
     }
 }

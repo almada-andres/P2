@@ -4,54 +4,64 @@ using UnityEngine;
 
 public class InvocarNieblaAleatoria : MonoBehaviour
 {
-    public GameObject prefabNiebla;  // Prefab de niebla
-    public Vector2 rangoPosicion;     // Rango de posiciones para instanciar la niebla
-    public float tiempoMin = 2f;      // Tiempo mínimo entre la aparición de la niebla
-    public float tiempoMax = 6f;     // Tiempo máximo entre la aparición de la niebla
-    public int maxNieblaEnEscena = 10; // Máxima cantidad de niebla permitida en la escena
+    public ObjectPool poolNiebla;     // Referencia al Object Pool de niebla
+    public Vector2 rangoPosicion;    // Rango de posiciones para instanciar la niebla
+    public float tiempoMin = 2f;     // Tiempo mínimo entre la aparición de niebla
+    public float tiempoMax = 6f;     // Tiempo máximo entre la aparición de niebla
+    public int maxNieblaEnEscena = 10; // Máxima cantidad de niebla en la escena
+    public int minimoNieblaActiva = 5; // Mínimo número de nieblas activas
 
-    private float tiempoSiguienteNiebla;
-    private List<GameObject> nieblasActivas = new List<GameObject>(); // Lista para almacenar nieblas activas
+    private float tiempoProximaNiebla;
+    private int nieblasActivas = 0; // Contador de nieblas activas
 
     void Start()
     {
-        tiempoSiguienteNiebla = Random.Range(tiempoMin, tiempoMax);
+        // Generar las nieblas minimas al inicio
+        for (int i = 0; i < minimoNieblaActiva; i++)
+        {
+            InvocarNiebla();
+        }
+
+        // Configura el tiempo para la proxima niebla
+        tiempoProximaNiebla = Random.Range(tiempoMin, tiempoMax);
     }
 
     void Update()
     {
-        tiempoSiguienteNiebla -= Time.deltaTime;
-
-        // Verifica si es tiempo de invocar más niebla
-        if (tiempoSiguienteNiebla <= 0)
+        // Garantiza que haya nieblas activas
+        while (nieblasActivas < minimoNieblaActiva)
         {
             InvocarNiebla();
-            tiempoSiguienteNiebla = Random.Range(tiempoMin, tiempoMax);
         }
 
-        // Eliminar nieblas si se supera el límite
-        LimitarNieblaEnEscena();
+        // Controlar la invocacion de nieblas adicionales basadas en tiempo
+        tiempoProximaNiebla -= Time.deltaTime;
+        if (tiempoProximaNiebla <= 0 && nieblasActivas < maxNieblaEnEscena)
+        {
+            InvocarNiebla();
+            tiempoProximaNiebla = Random.Range(tiempoMin, tiempoMax);
+        }
     }
 
     void InvocarNiebla()
     {
-        // Crea una posición aleatoria dentro del rango definido
+        // Genera una posicion aleatoria dentro del rango definido
         Vector2 posicionAleatoria = new Vector2(Random.Range(-rangoPosicion.x, rangoPosicion.x),
                                                 Random.Range(-rangoPosicion.y, rangoPosicion.y));
-        // Instancia la niebla y la agrega a la lista
-        GameObject niebla = Instantiate(prefabNiebla, posicionAleatoria, Quaternion.identity);
-        nieblasActivas.Add(niebla);
+        // Obtiene un objeto del pool y lo coloca en la posicion
+        GameObject niebla = poolNiebla.GetObject();
+        niebla.transform.position = posicionAleatoria;
+        nieblasActivas++;
+
+        // Devuelve la niebla al pool despues de un tiempo
+        StartCoroutine(DevolverNiebla(niebla, 5f)); // Ejemplo: la niebla dura 5 segundos
     }
 
-    void LimitarNieblaEnEscena()
+    System.Collections.IEnumerator DevolverNiebla(GameObject niebla, float delay)
     {
-        // Verifica si hay más niebla activa que el límite permitido
-        while (nieblasActivas.Count > maxNieblaEnEscena)
-        {
-            // Elimina la niebla más antigua
-            GameObject nieblaARemover = nieblasActivas[0]; // Toma la niebla más antigua
-            nieblasActivas.RemoveAt(0); // Elimina de la lista
-            Destroy(nieblaARemover); // Destruye el objeto en la escena
-        }
+        yield return new WaitForSeconds(delay);
+        poolNiebla.ReturnObject(niebla);
+        nieblasActivas--;
     }
 }
+
