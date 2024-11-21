@@ -13,7 +13,7 @@ public class Vida : MonoBehaviour
     public ProgresoNivelSO progresoNivel;
 
     public List<Image> iconosVida;
-    public UnityEvent onVidaModificada; // Evento para acciones adicionales al restar vida
+    public UnityEvent onVidaModificada;
 
     void Start()
     {
@@ -21,13 +21,15 @@ public class Vida : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
 
-        // Asegurarse de que el AudioSource exista
+
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
         }
 
-        ActualizarIconosVida(); // Inicializa la visualización de los corazones
+        
+
+        ActualizarIconosVida(); 
     }
 
     public void RestarVida(int daño)
@@ -40,7 +42,7 @@ public class Vida : MonoBehaviour
 
             if (animator != null)
             {
-                // Resetea cualquier trigger o parametro que este activo
+                // Resetea cualquier trigger o parámetro que esté activo
                 foreach (AnimatorControllerParameter parametro in animator.parameters)
                 {
                     if (parametro.type == AnimatorControllerParameterType.Bool)
@@ -53,21 +55,18 @@ public class Vida : MonoBehaviour
                     }
                 }
 
-                animator.Play("Muerto"); 
+                animator.Play("Muerto");
                 Debug.Log("Forzando animación 'Muerto'.");
-                /*Tuve que forzar la animación, ya que no podia solucionar/encontrar el error que impedia que se ejecute.*/
             }
 
-            // Desactiva el movimiento y la interacción del jugador
             DesactivarMovimiento();
 
             Jugador jugador = GetComponent<Jugador>();
             if (jugador != null)
             {
-                jugador.SetVisibilidad(false); // Desactiva la visibilidad
+                jugador.SetVisibilidad(false); 
             }
 
-            // Llama a la función de derrota del controlador del juego
             Debug.Log("Jugador derrotado");
             gameController.Defeat();
         }
@@ -75,16 +74,28 @@ public class Vida : MonoBehaviour
         {
             // Reproducir sonido de daño y activar animación
             audioSource.PlayOneShot(sonidoDaño);
+      
             if (animator != null)
             {
                 animator.SetTrigger("Daño");
+            }
+
+            // Activar el resplandor de daño - Se realizo de esta manera por error al declarar al principio la referencia y no poder solucionarlo.
+            Resplandor resplandor = GetComponent<Resplandor>();
+            EfectoSangre efectoSangre = GetComponent<EfectoSangre>();
+
+            if (resplandor != null && efectoSangre != null)
+            {
+                efectoSangre.EmitirSangre();
+
+                resplandor.Luz();
             }
         }
 
         Debug.Log("Vida restante: " + progresoNivel.vidaActual);
 
         onVidaModificada.Invoke();
-  
+
         ActualizarIconosVida();
     }
 
