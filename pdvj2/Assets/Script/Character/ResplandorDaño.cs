@@ -13,7 +13,6 @@ public class Resplandor : MonoBehaviour
     {
         if (luzResplandor == null)
         {
-            Debug.LogError("No se asignó una Light2D al script Resplandor.");
             enabled = false; // Desactiva el script
         }
 

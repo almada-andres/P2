@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalLlaves: 1
   totalCofres: 1
-  llavesObtenidas: 1
-  cofresAbiertos: 1
+  llavesObtenidas: 0
+  cofresAbiertos: 0
   vidaMaxima: 3
-  vidaActual: 1
+  vidaActual: 0

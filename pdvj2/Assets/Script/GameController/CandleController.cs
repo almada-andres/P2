@@ -6,6 +6,7 @@ public class CandleController : MonoBehaviour
     [SerializeField] private GameObject candleLightObject; // Objeto que contiene la luz 2D de la vela
     [SerializeField] private GameObject player;
     [SerializeField] private UnityEvent OnCandleCollected; // Evento para abrir la puerta
+    [SerializeField] private GameObject Bloq;
 
     private void OnEnable()
     {
@@ -14,13 +15,16 @@ public class CandleController : MonoBehaviour
         {
             candleLightObject.SetActive(true);
         }
+        if (Bloq != null)
+        {
+            Bloq.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Jugador"))
         {
-            Debug.Log("Jugador tocó la vela");
             OnCandleCollected.Invoke(); // Llama al evento para abrir la puerta
 
             // Separa el objeto de luz y lo asigna al jugador

@@ -10,6 +10,10 @@ TagManager:
   - Mapa
   - Llave
   - Cartel
+  - Hongo
+  - Stage2
+  - Stage2No
+  - TumbaTimy
   layers:
   - Default
   - TransparentFX

@@ -30,7 +30,6 @@ public class Enemigo : MonoBehaviour
             direccion = Vector2.up; // Patrullaje vertical
         else
         {
-            Debug.LogWarning("Los límites del enemigo no están configurados correctamente. El enemigo no se moverá.");
             direccion = Vector2.zero;
         }
     }
@@ -45,7 +44,6 @@ public class Enemigo : MonoBehaviour
             {
                 if (!persiguiendo)
                 {
-                    Debug.Log("El enemigo ha detectado al jugador.");
                     persiguiendo = true;
                 }
                 PerseguirJugador();
@@ -54,7 +52,6 @@ public class Enemigo : MonoBehaviour
             {
                 if (persiguiendo)
                 {
-                    Debug.Log("El enemigo perdió al jugador. Regresando a patrullaje.");
                     persiguiendo = false;
                 }
                 Patrullar();

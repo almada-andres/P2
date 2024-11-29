@@ -30,12 +30,11 @@ public class ControladorEventos : MonoBehaviour
 
     void EjecutarEvento1()
     {
-        Debug.Log("Ejecutando Evento 1");
         ambientarNoche.IniciarNoche();
     }
 
     void EjecutarEvento2()
     {
-        Debug.Log("Ejecutando Evento 2");
+
     }
 }

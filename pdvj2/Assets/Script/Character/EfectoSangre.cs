@@ -10,9 +10,5 @@ public class EfectoSangre : MonoBehaviour
         {
             particulasSangre.Play();
         }
-        else
-        {
-            Debug.LogWarning("No se asignó un sistema de partículas.");
-        }
     }
 }

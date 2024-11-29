@@ -2,17 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.Rendering.Universal;
 
 public class Vida : MonoBehaviour
 {
-    [SerializeField] private GameController gameController;
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private AudioClip sonidoDaño;
     private AudioSource audioSource;
     private Animator animator;
     [SerializeField] private ProgresoNivelSO progresoNivel;
 
-    [SerializeField] private List<Image> iconosVida;
-    [SerializeField] private UnityEvent onVidaModificada; 
+    [Header("Vida y Luces 2D")]
+    [SerializeField] private List<Image> iconosVida; 
+    [SerializeField] private List<Light2D> lucesVida;
+
+    [SerializeField] private UnityEvent onVidaModificada;
 
     void Start()
     {
@@ -50,9 +54,7 @@ public class Vida : MonoBehaviour
                         animator.ResetTrigger(parametro.name);
                     }
                 }
-
                 animator.Play("Muerto");
-                Debug.Log("Forzando animación 'Muerto'.");
             }
 
             DesactivarMovimiento();
@@ -62,9 +64,7 @@ public class Vida : MonoBehaviour
             {
                 jugador.SetVisibilidad(false);
             }
-
-            Debug.Log("Jugador derrotado");
-            gameController.Defeat();
+            gameManager.Defeat();
         }
         else
         {
@@ -96,6 +96,11 @@ public class Vida : MonoBehaviour
 
     private void DesactivarMovimiento()
     {
+        Jugador jugador = GetComponent<Jugador>();
+        if (jugador != null)
+        {
+            jugador.SetEstadoVivo(false); // Marca al jugador como muerto
+        }
         // Desactiva el script de movimiento
         Mover movimiento = GetComponent<Mover>();
         if (movimiento != null)
@@ -126,10 +131,18 @@ public class Vida : MonoBehaviour
             if (i < progresoNivel.VidaActual)
             {
                 iconosVida[i].enabled = true; // Muestra el icono si hay vida
+                if (lucesVida.Count > i && lucesVida[i] != null)
+                {
+                    lucesVida[i].enabled = true; // Activa la luz 2D correspondiente
+                }
             }
             else
             {
                 iconosVida[i].enabled = false; // Oculta el icono si la vida fue restada
+                if (lucesVida.Count > i && lucesVida[i] != null)
+                {
+                    lucesVida[i].enabled = false; // Apaga la luz 2D correspondiente
+                }
             }
         }
     }

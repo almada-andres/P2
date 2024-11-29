@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Jugador : MonoBehaviour
 {
@@ -8,15 +10,26 @@ public class Jugador : MonoBehaviour
     [SerializeField] private ParticleSystem particulasCofre;
     private AudioSource audioSource;
 
-    [SerializeField] private GameController gameController; 
     [SerializeField] private SistemaProgreso sistemaProgreso;
-    private Inventory inventory; 
+    private Inventory inventory;
 
-    private bool visible = true;            // Estado de visibilidad del jugador
+    private bool visible = true;
+    private bool estaVivo = true;
 
-    [SerializeField] private Image imageLlave;               // Referencia al Image de la llave en el HUD
-    [SerializeField] private bool tieneLlave = false;       // Estado de si el jugador tiene la llave
+    [SerializeField] private Image imageLlave;
+    [SerializeField] private bool tieneLlave = false;
 
+    [SerializeField] private Image imageLlaveDorada;
+    [SerializeField] private bool tieneLlaveDorada = false;
+
+    private bool efectoHongoActivo = false;
+    private float duracionEfectoRestante = 0f;
+    private bool controlesInvertidos = false;
+
+    [SerializeField] private GameObject spriteCofreActivo;
+    [SerializeField] private GameObject memoryHUD;
+
+    [SerializeField] private TextMeshProUGUI Stage2No;
 
     public void SetVisibilidad(bool estado)
     {
@@ -28,8 +41,20 @@ public class Jugador : MonoBehaviour
         return visible;
     }
 
+    public bool EfectoActivo => efectoHongoActivo;
+
+    public void SetEstadoVivo(bool estado)
+    {
+        estaVivo = estado;
+    }
+
     void Start()
     {
+        if (Stage2No != null)
+        {
+            Stage2No.gameObject.SetActive(false);
+        }
+
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -38,14 +63,50 @@ public class Jugador : MonoBehaviour
 
         inventory = FindObjectOfType<Inventory>();
 
-        // Asegurarse de que la imagen de la llave esté desactivada al inicio
         if (imageLlave != null)
         {
-            imageLlave.enabled = false; // Desactivar la imagen al inicio
+            imageLlave.enabled = false;
         }
-        else
+
+        if (imageLlaveDorada != null)
         {
-            Debug.LogWarning("No se ha asignado la imagen de la llave en el HUD.");
+            imageLlaveDorada.enabled = false;
+        }
+
+        if (spriteCofreActivo != null)
+        {
+            spriteCofreActivo.SetActive(false);
+        }
+
+        if (memoryHUD != null)
+        {
+            memoryHUD.SetActive(false);
+        }
+    }
+
+    private void Update()
+    {
+        if (!estaVivo) return;
+
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        if (controlesInvertidos)
+        {
+            horizontal *= -1;
+            vertical *= -1;
+        }
+
+        Vector2 movimiento = new Vector2(horizontal, vertical);
+        transform.Translate(movimiento * Time.deltaTime * 5f);
+
+        if (efectoHongoActivo)
+        {
+            duracionEfectoRestante -= Time.deltaTime;
+            if (duracionEfectoRestante <= 0)
+            {
+                TerminarEfectoHongo();
+            }
         }
     }
 
@@ -53,7 +114,7 @@ public class Jugador : MonoBehaviour
     {
         if (collision.CompareTag("Cofre"))
         {
-            if (tieneLlave) // Verifica si el jugador tiene la llave
+            if (tieneLlave)
             {
                 audioSource.PlayOneShot(sonidoAbrirCofre);
 
@@ -63,21 +124,22 @@ public class Jugador : MonoBehaviour
                     particulasCofre.Play();
                 }
 
-                // Actualizar el progreso del nivel
-                sistemaProgreso.AbrirCofre();
-
-                // getter para acceder a totalCofres y cofresAbiertos
-                if (sistemaProgreso.progresoNivel.GetCofresAbiertos() >= sistemaProgreso.progresoNivel.GetTotalCofres())
+                if (memoryHUD != null)
                 {
-                    Debug.Log("Has recogido todos los cofres.");
-                    gameController.Victory();
+                    memoryHUD.SetActive(true);
                 }
 
-                // Destruir el cofre
+                if (spriteCofreActivo != null)
+                {
+                    spriteCofreActivo.SetActive(true);
+                }
+
+                sistemaProgreso.AbrirCofre();
+                ActivarLlaveDorada();
+
                 float tiempoDestruccion = Mathf.Max(sonidoAbrirCofre.length, particulasCofre.main.duration);
                 Destroy(collision.gameObject, tiempoDestruccion);
 
-                // Eliminar la llave si solo se usa una vez
                 tieneLlave = false;
                 ActualizarIconoLlave();
             }
@@ -89,36 +151,94 @@ public class Jugador : MonoBehaviour
 
         if (collision.CompareTag("Llave"))
         {
-            Debug.Log("El jugador ha colisionado con una llave.");
-
             if (sonidoRecogerLlave != null)
             {
                 audioSource.PlayOneShot(sonidoRecogerLlave);
             }
 
-            // Añadir la llave al inventario
             inventory.AddItem("llave");
-            Debug.Log("Llave añadida al inventario.");
-
-            // Actualizar el progreso del nivel
             sistemaProgreso.ObtenerLlave();
 
-            // Activar el icono de la llave en el HUD
             tieneLlave = true;
             ActualizarIconoLlave();
-
-            // Destruir el objeto de la llave
             Destroy(collision.gameObject);
-            Debug.Log("Objeto de la llave destruido.");
+        }
+
+        if (collision.CompareTag("Hongo"))
+        {
+            if (!efectoHongoActivo)
+            {
+                float duracionEfecto = 5f;
+                ActivarEfectoHongo(duracionEfecto);
+                Destroy(collision.gameObject);
+            }
+        }
+
+        if (collision.CompareTag("Stage2"))
+        {
+            GameManager.Instance.Victory("Stage2");
+        }
+
+        if (collision.CompareTag("Stage2No"))
+        {
+            if (tieneLlaveDorada)
+            {
+                Debug.Log("Accediendo al nivel 2...");
+            }
+            else
+            {
+                MostrarMensaje("Necesitas la Llave Dorada para acceder.");
+            }
         }
     }
 
     private void ActualizarIconoLlave()
     {
-        // Actualizar la visibilidad del icono de la llave en el HUD
         if (imageLlave != null)
         {
             imageLlave.enabled = tieneLlave;
+        }
+    }
+
+    private void ActivarLlaveDorada()
+    {
+        tieneLlaveDorada = true;
+
+        if (imageLlaveDorada != null)
+        {
+            imageLlaveDorada.enabled = true;
+        }
+    }
+
+    public void ActivarEfectoHongo(float duracion)
+    {
+        efectoHongoActivo = true;
+        controlesInvertidos = true;
+        duracionEfectoRestante = duracion;
+    }
+
+    private void TerminarEfectoHongo()
+    {
+        controlesInvertidos = false;
+        efectoHongoActivo = false;
+    }
+
+    private void MostrarMensaje(string mensaje)
+    {
+        if (Stage2No != null)
+        {
+            Stage2No.text = mensaje;
+            Stage2No.gameObject.SetActive(true);
+
+            Invoke(nameof(OcultarMensaje), 3f);
+        }
+    }
+
+    private void OcultarMensaje()
+    {
+        if (Stage2No != null)
+        {
+            Stage2No.gameObject.SetActive(false);
         }
     }
 }

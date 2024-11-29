@@ -32,12 +32,6 @@ public class SistemaProgreso : MonoBehaviour
     public void ObtenerLlave()
     {
         progresoNivel.IncrementarLlaves();
-
-        // Verifica si el jugador obtuvo todas las llaves
-        if (progresoNivel.LlavesObtenidas >= progresoNivel.TotalLlaves)
-        {
-            Debug.Log("¡Has obtenido todas las llaves!");
-        }
     }
 
     public void AbrirCofre()
@@ -47,12 +41,9 @@ public class SistemaProgreso : MonoBehaviour
         // Verifica si el jugador abrió todos los cofres
         if (progresoNivel.GetCofresAbiertos() >= progresoNivel.GetTotalCofres())
         {
-            Debug.Log("¡Has abierto todos los cofres!");
             OnAllChestsOpened.Invoke(); // Activa el evento para que aparezca la vela
         }
     }
-
-    // Metodo para avanzar al siguiente nivel
     public void AvanzarNivel()
     {
         // Actualiza el nombre en pantalla al cargar una nueva escena

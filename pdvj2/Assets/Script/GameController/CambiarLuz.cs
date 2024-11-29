@@ -27,6 +27,5 @@ public class AmbientarNocheOscura : MonoBehaviour
         // Restablecer el temporizador y empezar la transicion
         temporizador = duracionNoche;
         nocheIniciada = true;
-        Debug.Log("Transición a noche iniciada");
     }
 }
