@@ -28,7 +28,7 @@ public class PauseMenuController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Escape) && !pauseMenuCanvas.activeSelf)
         {
             if (isPaused)
             {

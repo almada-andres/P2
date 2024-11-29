@@ -24,12 +24,13 @@ public class Jugador : MonoBehaviour
 
     private bool efectoHongoActivo = false;
     private float duracionEfectoRestante = 0f;
-    private bool controlesInvertidos = false;
 
     [SerializeField] private GameObject spriteCofreActivo;
     [SerializeField] private GameObject memoryHUD;
 
     [SerializeField] private TextMeshProUGUI Stage2No;
+
+    private Mover mover;
 
     public void SetVisibilidad(bool estado)
     {
@@ -82,23 +83,14 @@ public class Jugador : MonoBehaviour
         {
             memoryHUD.SetActive(false);
         }
+
+        // Obtener la referencia al componente Mover
+        mover = GetComponent<Mover>();
     }
 
     private void Update()
     {
         if (!estaVivo) return;
-
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        if (controlesInvertidos)
-        {
-            horizontal *= -1;
-            vertical *= -1;
-        }
-
-        Vector2 movimiento = new Vector2(horizontal, vertical);
-        transform.Translate(movimiento * Time.deltaTime * 5f);
 
         if (efectoHongoActivo)
         {
@@ -213,13 +205,14 @@ public class Jugador : MonoBehaviour
     public void ActivarEfectoHongo(float duracion)
     {
         efectoHongoActivo = true;
-        controlesInvertidos = true;
+        // Metodo para invertir los controles
+        mover.EstablecerControlesInvertidos(true);
         duracionEfectoRestante = duracion;
     }
 
     private void TerminarEfectoHongo()
     {
-        controlesInvertidos = false;
+        mover.EstablecerControlesInvertidos(false); // Restablecemos los controles a la normalidad
         efectoHongoActivo = false;
     }
 

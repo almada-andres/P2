@@ -43989,6 +43989,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 191820636}
   - {fileID: 385839977}
   - {fileID: 1379756838}
   - {fileID: 1338980938}
@@ -43997,7 +43998,6 @@ Transform:
   - {fileID: 1848712530}
   - {fileID: 2137527277}
   - {fileID: 1883119287}
-  - {fileID: 191820636}
   - {fileID: 270410884}
   - {fileID: 239230678}
   - {fileID: 1124901400}
@@ -54968,8 +54968,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 2
+  m_AngularDrag: 2
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -55101,7 +55101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c2d5e44fd0f9d4cb77b7d749422762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadMovimiento: 0.2
+  velocidadMovimiento: 3
 --- !u!95 &2045008947
 Animator:
   serializedVersion: 5

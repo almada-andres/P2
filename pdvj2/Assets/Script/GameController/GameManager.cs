@@ -39,8 +39,6 @@ public class GameManager : MonoBehaviour
 
         // Define la ruta para guardar el archivo JSON
         rutaArchivo = Path.Combine(Application.persistentDataPath, "progresion.json");
-
-        musicaFondo = GameObject.Find("MusicaFondo").GetComponent<AudioSource>();
     }
 
     public void RegistrarUI(TextMeshProUGUI mensaje, Image imagen)
@@ -94,15 +92,15 @@ public class GameManager : MonoBehaviour
     }
 
     // --------- Gestión de victoria y derrota ----------
-    public void Victory(string siguienteNivel)
+    public void Victory(string Stage2)
     {
         foreach (var objeto in objetosPersistentes)
         {
             objeto.HacerPersistente();
         }
-
+        Time.timeScale = 1f;
         // Cargar siguiente nivel
-        SceneManager.LoadScene(siguienteNivel);
+        SceneManager.LoadScene("Stage 2");
     }
 
     public void Defeat()
